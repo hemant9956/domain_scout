@@ -1,0 +1,10 @@
+http:
+  address: ":8080"
+
+ssh:
+  timeout_seconds: 15
+  host_key_verification: required
+
+discovery:
+  command_timeout_seconds: 60
+  dns_verification: true
