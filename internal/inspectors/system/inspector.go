@@ -162,6 +162,6 @@ uptime=$(awk '{printf "%d", $1}' /proc/uptime 2>/dev/null)
 current_user=$(id -un 2>/dev/null)
 timezone=$(date +%Z 2>/dev/null)
 if [ -f /.dockerenv ] || grep -Eqi 'docker|containerd|kubepods|lxc' /proc/1/cgroup /proc/1/mountinfo 2>/dev/null; then environment=Container; else environment=Host; fi
-disk=$(df -B1P / 2>/dev/null | awk 'NR == 2 {printf "%.2f,%.2f,%.2f", $2/1073741824, $4/1073741824, $3/1073741824}')
+disk=$(df -B1 -P / 2>/dev/null | awk 'NR == 2 {printf "%.2f,%.2f,%.2f", $2/1073741824, $4/1073741824, $3/1073741824}')
 memory=$(awk '/^MemTotal:/ {total=$2} /^MemAvailable:/ {available=$2} /^MemFree:/ {free=$2} END {if (total > 0) printf "%.2f,%.2f,%.2f,%.2f", total/1048576, available/1048576, free/1048576, (total-available)/1048576}' /proc/meminfo 2>/dev/null)
 printf 'HOSTNAME=%s\nIPV4=%s\nIPV6=%s\nMAC=%s\nSERVER_OS=%s\nOS_VERSION=%s\nENVIRONMENT=%s\nARCHITECTURE=%s\nCORES=%s\nTHREADS=%s\nCPU_MODEL=%s\nKERNEL=%s\nUPTIME=%s\nCURRENT_USER=%s\nTIMEZONE=%s\nDISK=%s\nMEMORY=%s\n' "$hostname" "$ipv4" "$ipv6" "$mac" "$server_os" "$os_version" "$environment" "$architecture" "$cores" "$threads" "$cpu_model" "$kernel" "$uptime" "$current_user" "$timezone" "$disk" "$memory"`
