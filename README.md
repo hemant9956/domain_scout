@@ -58,7 +58,12 @@ sudo ./domain-scout-linux-amd64 scan --timeout 3m
 
 ### Agent JSON response
 
-The agent serializes the same `discovery.Result` model returned by `POST /api/v1/discoveries`. The response includes `status`, `scanned_at`, `server`, `detected_services`, `total_domains`, `domains`, and optional `warnings`. It is not wrapped in a second `success`/`data` envelope.
+The agent serializes the same `discovery.Result` model returned by `POST /api/v1/discoveries`. In addition to the existing `status`, `scanned_at`, `server`, `detected_services`, `total_domains`, `domains`, and optional `warnings`, the response includes:
+
+- `servers`: installed web/container services, their actual running state, and structured domains with aliases, config files, document roots, and listening ports.
+- `system`: hostname, IP addresses, MAC, OS, CPU, uptime, user, timezone, disk, and memory information.
+
+The added fields are top-level and additive, so existing API response fields remain available. CPU `cores` counts physical cores when `lscpu` is available; `threads` counts online logical CPUs. Disk values describe the root filesystem. Disk and memory values labeled `*_gb` use GiB (bytes divided by 1024^3); unavailable metrics remain zero/empty and are described in `warnings`. Missing IP or domain lists are returned as empty arrays.
 
 ## Run the HTTP API
 

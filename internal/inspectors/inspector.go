@@ -13,6 +13,7 @@ type Domain struct {
 	ProxyTarget  string   `json:"proxy_target,omitempty"`
 	SSL          bool     `json:"ssl"`
 	Aliases      []string `json:"aliases,omitempty"`
+	Ports        []int    `json:"ports,omitempty"`
 }
 
 type Inspector interface {

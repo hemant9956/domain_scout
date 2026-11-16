@@ -14,7 +14,13 @@ func New() *Inspector             { return &Inspector{} }
 func (i *Inspector) Name() string { return "docker" }
 func (i *Inspector) Detect(ctx context.Context, ex ssh.Executor) (bool, error) {
 	_, err := ex.Run(ctx, "docker info --format '{{.ServerVersion}}'")
+	if ctx.Err() != nil {
+		return false, ctx.Err()
+	}
 	return err == nil, nil
+}
+func (i *Inspector) Running(context.Context, ssh.Executor) (bool, error) {
+	return true, nil
 }
 func (i *Inspector) Discover(ctx context.Context, ex ssh.Executor) ([]inspectors.Domain, error) {
 	out, err := ex.Run(ctx, "docker ps --format '{{json .}}'")

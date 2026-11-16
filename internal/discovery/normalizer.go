@@ -28,10 +28,40 @@ func Normalize(input []inspectors.Domain) []inspectors.Domain {
 				existing.ProxyTarget = d.ProxyTarget
 			}
 			existing.SSL = existing.SSL || d.SSL
+			existing.Aliases = appendUnique(existing.Aliases, d.Aliases...)
+			existing.Ports = appendUniqueInts(existing.Ports, d.Ports...)
 			continue
 		}
 		index[d.Name] = len(out)
 		out = append(out, d)
 	}
 	return out
+}
+
+func appendUnique(values []string, added ...string) []string {
+	seen := make(map[string]bool, len(values)+len(added))
+	for _, value := range values {
+		seen[value] = true
+	}
+	for _, value := range added {
+		if value != "" && !seen[value] {
+			values = append(values, value)
+			seen[value] = true
+		}
+	}
+	return values
+}
+
+func appendUniqueInts(values []int, added ...int) []int {
+	seen := make(map[int]bool, len(values)+len(added))
+	for _, value := range values {
+		seen[value] = true
+	}
+	for _, value := range added {
+		if value > 0 && !seen[value] {
+			values = append(values, value)
+			seen[value] = true
+		}
+	}
+	return values
 }

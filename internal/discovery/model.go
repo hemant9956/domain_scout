@@ -8,6 +8,7 @@ import (
 )
 
 type Result struct {
+	ScanResponse
 	Status           string         `json:"status"`
 	ScannedAt        time.Time      `json:"scanned_at"`
 	Server           server.Info    `json:"server"`
@@ -20,3 +21,7 @@ type DomainResult struct {
 	inspectors.Domain
 	DNS dns.Result `json:"dns"`
 }
+
+type SystemInfo = server.SystemInfo
+type DiskInfo = server.DiskInfo
+type MemoryInfo = server.MemoryInfo

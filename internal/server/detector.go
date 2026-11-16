@@ -25,6 +25,9 @@ func (d *Detector) Detect(ctx context.Context, ex ssh.Executor) (Info, error) {
 	for _, item := range commands {
 		value, err := ex.Run(ctx, item.cmd)
 		if err != nil {
+			if ctx.Err() != nil {
+				return out, ctx.Err()
+			}
 			continue
 		}
 		*item.dst = strings.TrimSpace(value)
